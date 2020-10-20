@@ -47,3 +47,5 @@ The input data and limitations are written in **`data.json`** file<br>
 `Chromosome 14 , Likelihood: 8,060011 % , Fitness: 10 `<br>
 `Chromosome 15 , Likelihood: 8,060011 % , Fitness: 10 `<br>
 `Average fitness: 11,875`
+
+***Example of full solution search in example1.txt***
