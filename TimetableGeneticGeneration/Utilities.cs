@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -9,6 +10,19 @@ namespace TimetableGeneticGeneration
     class Utilities
     {
         public enum LessonType { Lecture, Practice };
+
+        //-------------static limitations data here ------------------------
+        public static int[] _lectureAudiences;  
+
+
+        public static void LoadLectureAudiences(String dataFilename)
+        {
+            string text = File.ReadAllText(dataFilename);
+            using JsonDocument doc = JsonDocument.Parse(text);
+            JsonElement root = doc.RootElement;
+            _lectureAudiences = Utilities.GetAsObjectJSON<int[]>(root, "AudienceForLectures");
+        }
+
         public static int ChooseRandomly(int from, int to)
         {
             using (RNGCryptoServiceProvider rg = new RNGCryptoServiceProvider())

@@ -14,6 +14,12 @@ namespace TimetableGeneticGeneration
         private int _audience;
         private bool _free;
 
+
+        public Utilities.LessonType LessonType
+        {
+            get { return _type; }
+        }
+
         public String Teacher
         {
             get { return _teacher; }

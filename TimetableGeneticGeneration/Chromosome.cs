@@ -14,7 +14,6 @@ namespace TimetableGeneticGeneration
         private float _deviation = 0;  //deviation from normal timetable (if deviation is 0 that's a correct timetable)
         private float _likelihood = 0;
 
-
         public float Deviation
         {
             get { return _deviation; }
@@ -122,22 +121,40 @@ namespace TimetableGeneticGeneration
                         {
                             var hourSpec1 = daySpec1._day.ElementAt(m).Value; //hours
                             var hourSpec2 = daySpec2._day.ElementAt(m).Value;
-                            if(!hourSpec1.IsFree && !hourSpec2.IsFree)
-                            {
-                                if (hourSpec1.Teacher == hourSpec2.Teacher)
-                                {
-                                    ++_deviation;
-                                }
-                                if (hourSpec1.Audience == hourSpec2.Audience)
-                                {
-                                    ++_deviation;
-                                }
-                            }   
+                            
+                            CheckBetweenBoth(hourSpec1, hourSpec2);   //check conflicts between different specialties
+                            CheckInCurrent(hourSpec1);  //check conflicts inside one specialty
                         }
                     } 
                 }
             }
             return _deviation;
+        }
+
+        private void CheckBetweenBoth(Lesson hourSpec1, Lesson hourSpec2)
+        {
+            if (!hourSpec1.IsFree && !hourSpec2.IsFree)
+            {
+                if (hourSpec1.Teacher == hourSpec2.Teacher)
+                {
+                    ++_deviation;
+                }
+                if (hourSpec1.Audience == hourSpec2.Audience)
+                {
+                    ++_deviation;
+                } 
+            }
+
+        }
+        private void CheckInCurrent(Lesson hourSpec1)
+        {
+            if (!hourSpec1.IsFree)
+            {
+                if (hourSpec1.LessonType == Utilities.LessonType.Lecture && !Utilities._lectureAudiences.Contains(hourSpec1.Audience))
+                {
+                    ++_deviation;
+                }
+            }
         }
 
 

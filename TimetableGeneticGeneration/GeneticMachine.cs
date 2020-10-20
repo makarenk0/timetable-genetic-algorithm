@@ -18,17 +18,25 @@ namespace TimetableGeneticGeneration
         private float previousFitness;
 
 
-        public GeneticMachine(int startPopulation = 4)
+        public GeneticMachine(String dataFilename, int startPopulation = 4)
         {
             _startPopulation = startPopulation;
+
+            LoadStaticLimitations(dataFilename);
             _generation = new List<Chromosome>();
             for (int i = 0; i< _startPopulation; i++)
             {
-                Chromosome start = new Chromosome("data.json");
+                Chromosome start = new Chromosome(dataFilename);
                 _generation.Add(start);
             }
             ComputeParametrs();
            
+
+        }
+
+        private void LoadStaticLimitations(String dataFilename)  //static limitations load here
+        {
+            Utilities.LoadLectureAudiences(dataFilename);
         }
 
         private void ComputeParametrs()
