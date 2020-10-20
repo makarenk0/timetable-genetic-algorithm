@@ -23,6 +23,16 @@ namespace TimetableGeneticGeneration
             FillForWeek(specialty, root);
         }
 
+        public WorkingWeek()
+        {
+            _week = new Dictionary<string, WorkingDay>();
+        }
+
+        public WorkingWeek(WorkingWeek week)
+        {
+            _week = new Dictionary<string, WorkingDay>(week._week);
+        }
+
         private void FillForWeek(string specialty, JsonElement root)
         {
             string[] workingDays = Utilities.GetAsObjectJSON<string[]>(root, "WorkingDays");

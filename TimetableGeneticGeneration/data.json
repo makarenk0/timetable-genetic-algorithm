@@ -3,14 +3,16 @@
         "Information retrieval": "Ivanov",
         "Databases": "Petrov",
         "Machine learning": "Vasiliev",
-        "OOP": "Andrejev"
+        "OOP": "Andrejev",
+        "AI": "Olegov",
+        "Web programming": "Kirilov"
     },
-    "Teacher": [ "Ivanov", "Petrov", "Vasiliev", "Andrejev", "Dmitrijev" ],
+    "Teacher": [ "Ivanov", "Petrov", "Vasiliev", "Andrejev", "Dmitrijev", "Kirilov", "Olegov" ],
     "Audience": [ 1, 2, 3, 4, 5, 6 ],
     "WorkingDays":  ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
 
 
-    "Subject": [ "Information retrieval", "Databases", "Machine learning", "OOP" ],
+    "Subject": [ "Information retrieval", "Databases", "Machine learning", "OOP", "AI", "Web programming" ],
     "Specialty": [ "CS", "SE" ],
     "CS_groups": [ "CS1", "CS2", "CS3", "CS4" ],
     "SE_groups": [ "SE1", "SE2", "SE3", "SE4" ],

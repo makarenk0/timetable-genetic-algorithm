@@ -36,9 +36,29 @@ namespace TimetableGeneticGeneration
             GenerateeChromosome(dataFilename);
         }
 
+        public Chromosome(Chromosome chr)
+        {
+            _timetable = new Dictionary<string, WorkingWeek>(chr._timetable);
+        }
+
         public Chromosome()
         {
             _timetable = new Dictionary<string, WorkingWeek>();
+        }
+
+        public int AmountOfWorkingDays()
+        {
+            return _timetable.ElementAt(0).Value._week.Count;
+        }
+
+        public int AmountOfSpecialties()
+        {
+            return _timetable.Count;
+        }
+
+        public List<String> Specialties()
+        {
+            return _timetable.Keys.ToList();
         }
 
         public override String ToString()
@@ -88,7 +108,7 @@ namespace TimetableGeneticGeneration
         public float ComputeDeviation()
         {
             
-            for(int i = 0; i< _timetable.Count() - 1; i++)
+            for(int i = 0; i< _timetable.Count()-1; i++)
             {
                 for(int j = i + 1; j< _timetable.Count(); j++)
                 {
@@ -104,14 +124,50 @@ namespace TimetableGeneticGeneration
                             var hourSpec2 = daySpec2._day.ElementAt(m).Value;
                             if(!hourSpec1.IsFree && !hourSpec2.IsFree)
                             {
-                                if (hourSpec1.Teacher == hourSpec2.Teacher) ++_deviation;
-                                if (hourSpec1.Audience == hourSpec2.Audience) ++_deviation;
+                                if (hourSpec1.Teacher == hourSpec2.Teacher)
+                                {
+                                    ++_deviation;
+                                }
+                                if (hourSpec1.Audience == hourSpec2.Audience)
+                                {
+                                    ++_deviation;
+                                }
                             }   
                         }
                     } 
                 }
             }
             return _deviation;
+        }
+
+
+        public Chromosome[] doubleDaysCrossover(Chromosome secondParent, int crossoverLine, String specialty)
+        {
+       
+            Chromosome first = new Chromosome(this);
+            Chromosome second = new Chromosome(secondParent);
+
+            for (int i = 0; _timetable.ElementAt(i).Value != _timetable[specialty]; i++)
+            {
+                second._timetable[second._timetable.ElementAt(i).Key] = _timetable.ElementAt(i).Value;
+
+                first._timetable[_timetable.ElementAt(i).Key] = secondParent._timetable.ElementAt(i).Value;
+            }
+
+          
+
+            WorkingWeek weekFirst = new WorkingWeek(_timetable[specialty]);
+            WorkingWeek weekSecond = new WorkingWeek(secondParent._timetable[specialty]);
+            for (int j = 0; j < crossoverLine; j++)
+            {
+                weekFirst._week[weekFirst._week.ElementAt(j).Key] = secondParent._timetable[specialty]._week.ElementAt(j).Value;
+                weekSecond._week[weekSecond._week.ElementAt(j).Key] = _timetable[specialty]._week.ElementAt(j).Value;
+            }
+            first._timetable[specialty] = weekFirst;
+            second._timetable[specialty] = weekSecond;
+
+            return new Chromosome[] { first, second };
+
         }
 
         

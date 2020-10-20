@@ -32,7 +32,7 @@ namespace TimetableGeneticGeneration
         public override string ToString()
         {
             String type = _type == Utilities.LessonType.Lecture ? "Lecture" : "Practice";
-            return _free ? "free" : String.Concat(_type, ", ", _subject, ", ", _teacher, ", Audience: ", _audience, ", ", _group);
+            return _free ? "free" : String.Concat(_type, ", ", _subject, ", ", _teacher, ", Audience: ", _audience, ", Group(s): ", _group);
         }
 
         public bool IsFree
