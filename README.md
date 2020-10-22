@@ -6,6 +6,7 @@ Conflicts which algorithm resolves:
 - Same audiences between specialties (Computer science, Software engineering, Applied math) conflict
 - Same teachers on different lessons at the same time conflict
 - Non lecture audiences problem
+- Required number of lectures/pratices (when there are more or less than required number)
 
 If algorithm sees low/negative progress it will mutate special percentage of chromosomes (**`percentageOfMutations`** field in `GeneticMachine.cs`)
 
