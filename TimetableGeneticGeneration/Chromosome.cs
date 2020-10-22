@@ -122,16 +122,18 @@ namespace TimetableGeneticGeneration
                             var hourSpec1 = daySpec1._day.ElementAt(m).Value; //hours
                             var hourSpec2 = daySpec2._day.ElementAt(m).Value;
                             
-                            CheckBetweenBoth(hourSpec1, hourSpec2);   //check conflicts between different specialties
-                            CheckInCurrent(hourSpec1);  //check conflicts inside one specialty
+                            CheckBetweenSpecialties(hourSpec1, hourSpec2);   //check conflicts between different specialties
+                            AudiencesTypeFitness(hourSpec1);
                         }
                     } 
                 }
             }
+
+            RequiredLessonsFitness();
             return _deviation;
         }
 
-        private void CheckBetweenBoth(Lesson hourSpec1, Lesson hourSpec2)
+        private void CheckBetweenSpecialties(Lesson hourSpec1, Lesson hourSpec2)
         {
             if (!hourSpec1.IsFree && !hourSpec2.IsFree)
             {
@@ -146,7 +148,8 @@ namespace TimetableGeneticGeneration
             }
 
         }
-        private void CheckInCurrent(Lesson hourSpec1)
+
+        private void AudiencesTypeFitness(Lesson hourSpec1)
         {
             if (!hourSpec1.IsFree)
             {
@@ -155,6 +158,31 @@ namespace TimetableGeneticGeneration
                     ++_deviation;
                 }
             }
+        }
+
+
+        private void RequiredLessonsFitness()
+        {
+            Dictionary<String, List<Lesson>> currentLessonsSet = GetAllLessonsSet();
+            Dictionary<String, List<Lesson>> requiredLessonsSet = new Dictionary<string, List<Lesson>>(Utilities._requiredLessonsSet);
+
+            int lackLessons = 0;
+            int overLessons = 0;
+            for (int i = 0; i< currentLessonsSet.Count; i++)
+            {
+                String specialty = currentLessonsSet.ElementAt(i).Key;
+                for(int j = 0; j< requiredLessonsSet[specialty].Count; j++)
+                {
+                    if(!currentLessonsSet[specialty].Contains(requiredLessonsSet[specialty].ElementAt(j)))
+                    {
+                        ++lackLessons;
+                    }
+                }
+                int rawOverLessons = currentLessonsSet[specialty].Count - requiredLessonsSet[specialty].Count;
+                overLessons += rawOverLessons >= 0 ? rawOverLessons : 0;
+            }
+            
+            _deviation += lackLessons + overLessons;
         }
 
 
@@ -187,6 +215,29 @@ namespace TimetableGeneticGeneration
 
         }
 
-        
+
+        public Dictionary<String, List<Lesson>> GetAllLessonsSet()  //required for checking amount of specific lectures/practices
+        {
+            Dictionary<String, List<Lesson>> lessonsSet = new Dictionary<string, List<Lesson>>();
+            for (int i = 0; i < _timetable.Count; i++)
+            {
+                lessonsSet.Add(_timetable.ElementAt(i).Key, new List<Lesson>());
+                WorkingWeek specialtyWeek = _timetable.ElementAt(i).Value;
+                for(int j = 0; j< specialtyWeek._week.Count; j++)
+                {
+                    WorkingDay day = specialtyWeek._week.ElementAt(j).Value;
+                    for(int k = 0; k< day._day.Count; k++)
+                    {
+                        if (!day._day.ElementAt(k).Value.IsFree)
+                        {
+                            lessonsSet[_timetable.ElementAt(i).Key].Add(new Lesson(day._day.ElementAt(k).Value));
+                        }
+                    }
+                }
+            }
+            return lessonsSet;
+        }
+
+
     }
 }

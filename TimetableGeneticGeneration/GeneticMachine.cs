@@ -17,11 +17,13 @@ namespace TimetableGeneticGeneration
         private float currentFitness = 0;
         private float previousFitness;
 
+        private String _dataFilename;
+
 
         public GeneticMachine(String dataFilename, int startPopulation = 4)
         {
             _startPopulation = startPopulation;
-
+            _dataFilename = dataFilename;
             LoadStaticLimitations(dataFilename);
             _generation = new List<Chromosome>();
             for (int i = 0; i< _startPopulation; i++)
@@ -37,6 +39,7 @@ namespace TimetableGeneticGeneration
         private void LoadStaticLimitations(String dataFilename)  //static limitations load here
         {
             Utilities.LoadLectureAudiences(dataFilename);
+            Utilities.LoadRequiredLessonsSet(dataFilename);
         }
 
         private void ComputeParametrs()
@@ -106,7 +109,7 @@ namespace TimetableGeneticGeneration
             for (int i = 0; i< numOfMutations; i++)
             {
                 int randMutation = Utilities.ChooseRandomly(0, _generation.Count - 1);
-                _generation[randMutation] = new Chromosome("data.json");
+                _generation[randMutation] = new Chromosome(_dataFilename);
             }
             ComputeParametrs();
         }

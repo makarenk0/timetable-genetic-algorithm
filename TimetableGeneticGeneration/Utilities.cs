@@ -12,7 +12,8 @@ namespace TimetableGeneticGeneration
         public enum LessonType { Lecture, Practice };
 
         //-------------static limitations data here ------------------------
-        public static int[] _lectureAudiences;  
+        public static int[] _lectureAudiences;
+        public static Dictionary<String, List<Lesson>> _requiredLessonsSet;
 
 
         public static void LoadLectureAudiences(String dataFilename)
@@ -21,6 +22,13 @@ namespace TimetableGeneticGeneration
             using JsonDocument doc = JsonDocument.Parse(text);
             JsonElement root = doc.RootElement;
             _lectureAudiences = Utilities.GetAsObjectJSON<int[]>(root, "AudienceForLectures");
+        }
+
+
+        public static void LoadRequiredLessonsSet(String dataFilename)
+        {
+            Chromosome amountSatisfying = new Chromosome(dataFilename);
+            _requiredLessonsSet = amountSatisfying.GetAllLessonsSet();
         }
 
         public static int ChooseRandomly(int from, int to)
